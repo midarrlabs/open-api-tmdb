@@ -4,7 +4,7 @@ defmodule OapiTmdb.MixProject do
   def project do
     [
       app: :oapi_tmdb,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -27,7 +27,9 @@ defmodule OapiTmdb.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:oapi_generator, "0.1.0-rc.3", only: :dev, runtime: false}
+      {:oapi_generator, "0.1.0-rc.3", only: :dev, runtime: false},
+      {:httpoison, "~> 2.0"},
+      {:jason, "~> 1.4"}
     ]
   end
 end

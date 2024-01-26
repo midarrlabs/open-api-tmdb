@@ -3,32 +3,24 @@ defmodule OapiTmdb.Operations do
   Provides API endpoint related to operations
   """
 
-  @default_client OapiTmdb.Client
-
   @doc """
   Details
 
   Query the top level details of a person.
 
-  ## Options
-
-    * `append_to_response`: comma separated list of endpoints within this namespace, 20 items max
-    * `language`
-
   """
-  @spec person_details(integer, keyword) :: {:ok, map} | :error
-  def person_details(person_id, opts \\ []) do
-    client = opts[:client] || @default_client
-    query = Keyword.take(opts, [:append_to_response, :language])
+  @spec person_details(integer) :: map
+  def person_details(person_id) do
 
-    client.request(%{
-      args: [person_id: person_id],
-      call: {OapiTmdb.Operations, :person_details},
-      url: "/3/person/#{person_id}",
+    HTTPoison.request(%{
       method: :get,
-      query: query,
-      response: [{200, :map}],
-      opts: opts
+      url: "https://api.themoviedb.org/3/person/#{person_id}",
+      params: %{"api_key" => Application.get_env(:oapi_tmdb, :api_key)}
     })
+    |> handle_response()
+  end
+
+  def handle_response(%HTTPoison.Response{status_code: 200, body: body}) do
+    Jason.decode!(body)
   end
 end
